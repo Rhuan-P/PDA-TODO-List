@@ -1,0 +1,29 @@
+# Dependências
+node_modules/
+
+# Arquivos de ambiente
+.env
+
+# Banco de dados SQLite
+database.sqlite
+
+# Logs
+logs
+*.log
+
+# Diretórios de IDEs e editores
+.vscode/
+.idea/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos temporários
+*.tmp
+*.swp
+*~
+
+# Arquivos de build
+dist/
+build/
