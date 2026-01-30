@@ -116,7 +116,7 @@ npm start
 
 ### 6. Acessar Aplicação
 - **Frontend:** http://localhost:3000
-- **API Docs:** http://localhost:3000/api-docs
+- **API Docs:** http://localhost:3000/api/docs
 - **Health Check:** http://localhost:3000/api/health
 
 ## � Deploy para Produção
@@ -314,7 +314,7 @@ MIT License - veja arquivo [LICENSE](LICENSE) para detalhes.
 ## 🌐 Links Úteis
 
 - **Aplicação:** https://pda-todo-list.vercel.app
-- **API Docs:** https://pda-todo-list.vercel.app/api-docs
+- **API Docs:** https://pda-todo-list.vercel.app/api/docs
 - **Repositório:** https://github.com/Rhuan-P/PDA-TODO-List
 - **Supabase:** https://supabase.com
 - **Vercel:** https://vercel.com

@@ -73,7 +73,7 @@ const swaggerOptions = {
 };
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Middleware para log de requisições
 app.use((req, res, next) => {
@@ -101,11 +101,11 @@ app.get('/', (req, res) => {
 // Rota de informações da API (para desenvolvimento)
 app.get('/api/info', (req, res) => {
   res.json({ 
-    message: 'API To-Do List',
-    docs: '/api-docs',
+    message: 'PDA TODO LIST API',
+    docs: '/api/docs',
     endpoints: {
       tarefas: '/api/tarefas',
-      docs: '/api-docs'
+      docs: '/api/docs'
     }
   });
 });
