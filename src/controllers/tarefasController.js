@@ -23,7 +23,7 @@ export const listarTarefas = async (req, res) => {
 
 export const criarTarefa = async (req, res) => {
   try {
-    const { titulo, descricao } = req.body;
+    const { titulo, descricao, status } = req.body;
     
     if (!titulo) {
       return res.status(400).json({ 
@@ -32,10 +32,23 @@ export const criarTarefa = async (req, res) => {
       });
     }
     
+    // Validar status se fornecido
+    let statusFinal = 'pendente';
+    if (status) {
+      const statusValidos = ['pendente', 'em_andamento', 'concluida'];
+      if (!statusValidos.includes(status)) {
+        return res.status(400).json({
+          error: 'Status inválido',
+          message: 'O status deve ser: pendente, em_andamento ou concluida'
+        });
+      }
+      statusFinal = status;
+    }
+    
     const tarefa = await Tarefa.create({ 
       titulo, 
       descricao: descricao || null,
-      status: 'pendente'
+      status: statusFinal
     });
     
     res.status(201).json(tarefa);
