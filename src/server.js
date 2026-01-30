@@ -1,5 +1,5 @@
 import app from './app.js';
-import './config/supabase.js';
+import { validateSupabaseConnection } from './config/supabase.js';
 
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -59,7 +59,8 @@ const shutdown = async (server, options = { coredump: false, timeout: 500 }) => 
 // Inicialização do servidor
 const startServer = async () => {
   try {
-    console.log('🔄 Conectando ao Supabase...');
+    // Validar conexão com Supabase antes de iniciar
+    await validateSupabaseConnection();
     
     // Iniciar o servidor
     const server = app.listen(PORT, '0.0.0.0', () => {
