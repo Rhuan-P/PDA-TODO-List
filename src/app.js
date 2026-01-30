@@ -15,6 +15,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Servir arquivos estáticos do frontend
+app.use(express.static(join(__dirname, '../public')));
+
 // Configuração do Swagger
 const swaggerOptions = {
   definition: {
@@ -86,10 +89,15 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Rota de boas-vindas
+// Rota principal - serve o frontend
 app.get('/', (req, res) => {
+  res.sendFile(join(__dirname, '../public/index.html'));
+});
+
+// Rota de informações da API (para desenvolvimento)
+app.get('/api/info', (req, res) => {
   res.json({ 
-    message: 'Bem-vindo à API To-Do List',
+    message: 'API To-Do List',
     docs: '/api-docs',
     endpoints: {
       tarefas: '/api/tarefas',

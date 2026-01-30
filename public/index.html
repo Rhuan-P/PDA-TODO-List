@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aplicativo web para gerenciamento de tarefas com API REST">
+    <meta name="keywords" content="todo, tarefas, produtividade, api">
+    <meta name="author" content="PDA TODO List">
+    
+    <title>To-Do List - Gerenciador de Tarefas</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- CSS Custom -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234f46e5'><path d='M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z'/></svg>">
+</head>
+<body>
+    <!-- Navbar Principal -->
+    <header class="navbar" role="banner">
+        <nav class="navbar-container" role="navigation" aria-label="Navegação principal">
+            <div class="navbar-brand">
+                <a href="#home" class="brand-link" aria-label="To-Do List - Início">
+                    <span class="material-icons" aria-hidden="true">check_box</span>
+                    <span class="brand-text">To-Do List</span>
+                </a>
+            </div>
+            
+            <!-- Menu Desktop -->
+            <ul class="navbar-menu" role="menubar">
+                <li class="navbar-item" role="none">
+                    <a href="#home" class="navbar-link active" role="menuitem" aria-current="page">
+                        <span class="material-icons">home</span>
+                        <span>Início</span>
+                    </a>
+                </li>
+                <li class="navbar-item" role="none">
+                    <a href="#tasks" class="navbar-link" role="menuitem">
+                        <span class="material-icons">checklist</span>
+                        <span>Tarefas</span>
+                    </a>
+                </li>
+                <li class="navbar-item" role="none">
+                    <a href="#statistics" class="navbar-link" role="menuitem">
+                        <span class="material-icons">bar_chart</span>
+                        <span>Estatísticas</span>
+                    </a>
+                </li>
+                <li class="navbar-item" role="none">
+                    <a href="#about" class="navbar-link" role="menuitem">
+                        <span class="material-icons">info</span>
+                        <span>Sobre</span>
+                    </a>
+                </li>
+                <li class="navbar-item navbar-divider" role="none"></li>
+                <li class="navbar-item" role="none">
+                    <button id="btnToggleApiInfo" class="navbar-link btn-link" role="menuitem" aria-label="Informações da API">
+                        <span class="material-icons">terminal</span>
+                        <span>API</span>
+                    </button>
+                </li>
+                <li class="navbar-item" role="none">
+                    <a href="https://github.com/Rhuan-P/PDA-TODO-List" target="_blank" class="navbar-link external-link" role="menuitem" aria-label="Repositório GitHub (abre em nova aba)">
+                        <span class="material-icons">menu_book</span>
+                        <span>GitHub</span>
+                        <span class="material-icons">open_in_new</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <!-- Menu Mobile Toggle -->
+            <button class="navbar-toggle" id="navbarToggle" aria-label="Alternar menu de navegação" aria-expanded="false" aria-controls="navbarMenu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            
+            <!-- Menu Mobile -->
+            <div class="navbar-menu-mobile" id="navbarMenu" role="menu" aria-hidden="true">
+                <ul class="navbar-menu-mobile-list">
+                    <li class="navbar-menu-mobile-item" role="none">
+                        <a href="#home" class="navbar-menu-mobile-link active" role="menuitem" aria-current="page">
+                            <span class="material-icons">home</span>
+                            <span>Início</span>
+                        </a>
+                    </li>
+                    <li class="navbar-menu-mobile-item" role="none">
+                        <a href="#tasks" class="navbar-menu-mobile-link" role="menuitem">
+                            <span class="material-icons">checklist</span>
+                            <span>Tarefas</span>
+                        </a>
+                    </li>
+                    <li class="navbar-menu-mobile-item" role="none">
+                        <a href="#statistics" class="navbar-menu-mobile-link" role="menuitem">
+                            <span class="material-icons">bar_chart</span>
+                            <span>Estatísticas</span>
+                        </a>
+                    </li>
+                    <li class="navbar-menu-mobile-item" role="none">
+                        <a href="#about" class="navbar-menu-mobile-link" role="menuitem">
+                            <span class="material-icons">info</span>
+                            <span>Sobre</span>
+                        </a>
+                    </li>
+                    <li class="navbar-menu-mobile-divider"></li>
+                    <li class="navbar-menu-mobile-item" role="none">
+                        <button id="btnToggleApiInfoMobile" class="navbar-menu-mobile-link btn-link" role="menuitem">
+                            <span class="material-icons">terminal</span>
+                            <span>Informações da API</span>
+                        </button>
+                    </li>
+                    <li class="navbar-menu-mobile-item" role="none">
+                        <a href="https://github.com/Rhuan-P/PDA-TODO-List" target="_blank" class="navbar-menu-mobile-link external-link" role="menuitem">
+                            <span class="material-icons">menu_book</span>
+                            <span>Repositório</span>
+                            <span class="material-icons">open_in_new</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="main">
+        <!-- Seção Home -->
+        <section id="home" class="hero-section" aria-labelledby="hero-title">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1 id="hero-title" class="hero-title">Organize suas tarefas com simplicidade</h1>
+                        <p class="hero-description">
+                            Gerencie suas atividades diárias com uma interface moderna e intuitiva. 
+                            Crie, edite e acompanhe suas tarefas em qualquer dispositivo.
+                        </p>
+                        <div class="hero-actions">
+                            <a href="#tasks" class="btn btn-primary btn-lg">
+                                <span class="material-icons">add_circle</span>
+                                <span>Começar Agora</span>
+                            </a>
+                            <a href="#about" class="btn btn-secondary btn-lg">
+                                <span class="material-icons">help</span>
+                                <span>Saiba Mais</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="hero-illustration">
+                            <span class="material-icons">assignment</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cards de Features -->
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <span class="material-icons">bolt</span>
+                        </div>
+                        <h3>Rápido e Intuitivo</h3>
+                        <p>Interface moderna com navegação fluida e resposta instantânea</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <span class="material-icons">verified_user</span>
+                        </div>
+                        <h3>100% Seguro</h3>
+                        <p>Seus dados estão seguros com validação robusta e tratamento de erros</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <span class="material-icons">smartphone</span>
+                        </div>
+                        <h3>Responsivo</h3>
+                        <p>Funciona perfeitamente em desktop, tablet e dispositivos móveis</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- Seção de Adicionar Tarefa -->
+            <section id="tasks" class="add-task-section" aria-labelledby="add-task-title">
+                <h2 id="add-task-title" class="section-title">Adicionar Nova Tarefa</h2>
+                
+                <form id="taskForm" class="task-form" novalidate>
+                    <div class="form-group">
+                        <label for="taskTitle" class="form-label">Título da Tarefa *</label>
+                        <input 
+                            type="text" 
+                            id="taskTitle" 
+                            name="titulo" 
+                            class="form-input" 
+                            placeholder="Ex: Estudar para a prova"
+                            required
+                            maxlength="100"
+                            aria-describedby="titleError"
+                        >
+                        <span id="titleError" class="form-error" role="alert"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="taskDescription" class="form-label">Descrição</label>
+                        <textarea 
+                            id="taskDescription" 
+                            name="descricao" 
+                            class="form-textarea" 
+                            placeholder="Descreva os detalhes da tarefa..."
+                            rows="3"
+                            maxlength="500"
+                            aria-describedby="descError"
+                        ></textarea>
+                        <span id="descError" class="form-error" role="alert"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                            <label for="taskStatus" class="form-label">Status da Tarefa</label>
+                            <div class="select-wrapper">
+                                <select 
+                                    id="taskStatus" 
+                                    name="status" 
+                                    class="form-select status-select"
+                                    aria-describedby="statusError"
+                                >
+                                    <option value="pendente" data-icon="hourglass_empty" data-color="warning">Pendente</option>
+                                    <option value="em_andamento" data-icon="pending" data-color="info">Em Andamento</option>
+                                    <option value="concluida" data-icon="check_circle" data-color="success">Concluída</option>
+                                </select>
+                                <div class="select-icon">
+                                    <span class="material-icons">hourglass_empty</span>
+                                </div>
+                            </div>
+                            <span id="statusError" class="form-error" role="alert"></span>
+                        </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <span class="material-icons">add</span>
+                            <span>Adicionar Tarefa</span>
+                        </button>
+                        <button type="reset" class="btn btn-secondary">
+                            <span class="material-icons">close</span>
+                            <span>Limpar</span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Seção de Filtros e Estatísticas -->
+            <section class="filters-section" aria-labelledby="filters-title">
+                <h2 id="filters-title" class="sr-only">Filtros e Estatísticas</h2>
+                
+                <div class="filters-container">
+                    <div class="filter-buttons">
+                        <button class="btn btn-filter active" data-filter="todos" aria-pressed="true">
+                            <span class="material-icons">list</span>
+                            Todas
+                        </button>
+                        <button class="btn btn-filter" data-filter="pendente" aria-pressed="false">
+                            <span class="material-icons">hourglass_empty</span>
+                            Pendentes
+                        </button>
+                        <button class="btn btn-filter" data-filter="em_andamento" aria-pressed="false">
+                            <span class="material-icons">pending</span>
+                            Em Andamento
+                        </button>
+                        <button class="btn btn-filter" data-filter="concluida" aria-pressed="false">
+                            <span class="material-icons">check_circle</span>
+                            Concluídas
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Lista de Tarefas -->
+            <section class="tasks-section" aria-labelledby="tasks-title">
+                <div class="section-header">
+                    <h2 id="tasks-title" class="section-title">Suas Tarefas</h2>
+                    <div class="loading-indicator" id="loadingIndicator" aria-hidden="true">
+                        <i class="lucide-loader-2 animate-spin"></i>
+                        <span>Carregando...</span>
+                    </div>
+                </div>
+                
+                <!-- Estado Vazio -->
+                <div id="emptyState" class="empty-state" aria-live="polite">
+                    <div class="empty-icon">
+                        <span class="material-icons">assignment</span>
+                    </div>
+                    <h3>Nenhuma tarefa encontrada</h3>
+                    <p>Adicione sua primeira tarefa para começar a organizar seu dia!</p>
+                </div>
+                
+                <!-- Lista de Tarefas -->
+                <div id="tasksList" class="tasks-list" role="list" aria-live="polite">
+                    <!-- Tarefas serão inseridas dinamicamente aqui -->
+                </div>
+            </section>
+
+            <!-- Seção de Estatísticas -->
+            <section id="statistics" class="statistics-section" aria-labelledby="statistics-title">
+                <h2 id="statistics-title" class="section-title">Estatísticas Detalhadas</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <span class="material-icons">checklist</span>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number" id="statTotal">0</h3>
+                            <p class="stat-label">Total de Tarefas</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-pending">
+                            <span class="material-icons">hourglass_empty</span>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number" id="statPending">0</h3>
+                            <p class="stat-label">Pendentes</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-progress">
+                            <span class="material-icons">pending</span>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number" id="statProgress">0</h3>
+                            <p class="stat-label">Em Andamento</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-completed">
+                            <span class="material-icons">check_circle</span>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number" id="statCompleted">0</h3>
+                            <p class="stat-label">Concluídas</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gráfico de Progresso -->
+                <div class="progress-section">
+                    <h3 class="progress-title">Taxa de Conclusão</h3>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+                
+                <!-- Atividade Recente -->
+                <div class="recent-activity">
+                    <h3 class="activity-title">Atividade Recente</h3>
+                    <div class="activity-list" id="activityList">
+                        <div class="activity-item">
+                            <span class="material-icons">info</span>
+                            <span>Nenhuma atividade recente</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção About -->
+            <section id="about" class="about-section" aria-labelledby="about-title">
+                <h2 id="about-title" class="section-title">Sobre o Projeto</h2>
+                
+                <div class="about-content">
+                    <div class="about-text">
+                        <h3>To-Do List App</h3>
+                        <p>
+                            Esta é uma aplicação web completa para gerenciamento de tarefas, 
+                            desenvolvida como parte de um projeto acadêmico para demonstrar 
+                            integração entre frontend e backend utilizando tecnologias modernas.
+                        </p>
+                        
+                        <h4>Tecnologias Utilizadas</h4>
+                        <div class="tech-grid">
+                            <div class="tech-item">
+                                <span class="material-icons">code</span>
+                                <span>HTML5 Semântico</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="material-icons">palette</span>
+                                <span>CSS3 Moderno</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="material-icons">bolt</span>
+                                <span>JavaScript Vanilla</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="material-icons">dns</span>
+                                <span>Node.js + Express</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="material-icons">storage</span>
+                                <span>SQLite + Sequelize</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="material-icons">menu_book</span>
+                                <span>Swagger/OpenAPI</span>
+                            </div>
+                        </div>
+                        
+                        <h4>Funcionalidades Principais</h4>
+                        <ul class="features-list">
+                            <li><span class="material-icons">check</span> CRUD completo de tarefas</li>
+                            <li><span class="material-icons">check</span> Filtros por status</li>
+                            <li><span class="material-icons">check</span> Design responsivo (Mobile-First)</li>
+                            <li><span class="material-icons">check</span> Validação de formulários</li>
+                            <li><span class="material-icons">check</span> Tratamento de erros robusto</li>
+                            <li><span class="material-icons">check</span> Interface acessível</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="about-visual">
+                        <div class="about-illustration">
+                            <span class="material-icons">rocket_launch</span>
+                        </div>
+                        <div class="about-links">
+                            <h4>Links Úteis</h4>
+                            <div class="links-grid">
+                                <a href="https://github.com/Rhuan-P/PDA-TODO-List" target="_blank" class="link-card">
+                                    <span class="material-icons">menu_book</span>
+                                    <span>Repositório GitHub</span>
+                                    <span class="material-icons">open_in_new</span>
+                                </a>
+                                <a href="/api/health" target="_blank" class="link-card">
+                                    <span class="material-icons">monitoring</span>
+                                    <span>Health Check</span>
+                                    <span class="material-icons">open_in_new</span>
+                                </a>
+                                <button id="btnToggleApiInfoAbout" class="link-card">
+                                    <span class="material-icons">terminal</span>
+                                    <span>Informações API</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="/api/health" target="_blank" class="footer-link">
+                        <span class="material-icons">monitoring</span>
+                        Health Check
+                    </a>
+                    <a href="https://github.com/Rhuan-P/PDA-TODO-List" target="_blank" class="footer-link">
+                        <span class="material-icons">code</span>
+                        GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal de Informações da API -->
+    <div id="apiInfoModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Informações da API</h3>
+                <button class="btn btn-ghost btn-sm" id="closeModal" aria-label="Fechar modal">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="apiInfoContent">
+                    <div class="loading">
+                        <i class="lucide-loader-2 animate-spin"></i>
+                        <span>Carregando informações...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalhes da Tarefa -->
+    <div id="taskDetailModal" class="modal" role="dialog" aria-labelledby="taskModalTitle" aria-hidden="true">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3 id="taskModalTitle">Detalhes da Tarefa</h3>
+                <button class="btn btn-ghost btn-sm" id="closeTaskModal" aria-label="Fechar modal">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="taskEditForm" class="task-edit-form" novalidate>
+                    <input type="hidden" id="editTaskId" name="id">
+                    
+                    <div class="form-group">
+                        <label for="editTaskTitle" class="form-label">Título da Tarefa *</label>
+                        <input 
+                            type="text" 
+                            id="editTaskTitle" 
+                            name="titulo" 
+                            class="form-input" 
+                            placeholder="Título da tarefa"
+                            required
+                            maxlength="100"
+                            aria-describedby="editTitleError"
+                        >
+                        <span id="editTitleError" class="form-error" role="alert"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editTaskDescription" class="form-label">Descrição</label>
+                        <textarea 
+                            id="editTaskDescription" 
+                            name="descricao" 
+                            class="form-textarea" 
+                            placeholder="Descreva os detalhes da tarefa..."
+                            rows="4"
+                            maxlength="500"
+                            aria-describedby="editDescError"
+                        ></textarea>
+                        <span id="editDescError" class="form-error" role="alert"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editTaskStatus" class="form-label">Status da Tarefa</label>
+                        <select 
+                            id="editTaskStatus" 
+                            name="status" 
+                            class="form-select"
+                            aria-describedby="editStatusError"
+                        >
+                            <option value="pendente">Pendente</option>
+                            <option value="em_andamento">Em Andamento</option>
+                            <option value="concluida">Concluída</option>
+                        </select>
+                        <span id="editStatusError" class="form-error" role="alert"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Informações da Tarefa</label>
+                        <div class="task-info-grid">
+                            <div class="info-item">
+                                <span class="info-label">ID:</span>
+                                <span id="infoTaskId" class="info-value">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Criada em:</span>
+                                <span id="infoCreatedDate" class="info-value">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Atualizada em:</span>
+                                <span id="infoUpdatedDate" class="info-value">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <div class="modal-actions-left">
+                            <button type="button" class="btn btn-danger" id="deleteTaskBtn">
+                                <span class="material-icons">delete</span>
+                                <span>Excluir Tarefa</span>
+                            </button>
+                        </div>
+                        <div class="modal-actions-right">
+                            <button type="button" class="btn btn-secondary" id="cancelEditBtn">
+                                <span class="material-icons">close</span>
+                                <span>Cancelar</span>
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="saveTaskBtn">
+                                <span class="material-icons">save</span>
+                                <span>Salvar Alterações</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- JavaScript -->
+    <script src="/js/app.js"></script>
+</body>
+</html>
