@@ -3,13 +3,14 @@ import Tarefa from '../models/Tarefa.js';
 export const listarTarefas = async (req, res) => {
   try {
     const { status } = req.query;
-    const where = {};
     
+    let tarefas;
     if (status) {
-      where.status = status;
+      tarefas = await Tarefa.findByStatus(status);
+    } else {
+      tarefas = await Tarefa.findAll();
     }
     
-    const tarefas = await Tarefa.findAll({ where });
     res.json(tarefas);
   } catch (error) {
     console.error('Erro ao listar tarefas:', error);
@@ -33,7 +34,8 @@ export const criarTarefa = async (req, res) => {
     
     const tarefa = await Tarefa.create({ 
       titulo, 
-      descricao: descricao || null 
+      descricao: descricao || null,
+      status: 'pendente'
     });
     
     res.status(201).json(tarefa);
@@ -50,14 +52,14 @@ export const buscarTarefa = async (req, res) => {
   try {
     const { id } = req.params;
     
-    if (isNaN(id)) {
+    if (!id || isNaN(id)) {
       return res.status(400).json({ 
         error: 'ID inválido',
         message: 'O ID deve ser um número' 
       });
     }
     
-    const tarefa = await Tarefa.findByPk(id);
+    const tarefa = await Tarefa.findById(parseInt(id));
     
     if (!tarefa) {
       return res.status(404).json({ 
@@ -81,7 +83,7 @@ export const atualizarTarefa = async (req, res) => {
     const { id } = req.params;
     const { titulo, descricao, status } = req.body;
     
-    if (isNaN(id)) {
+    if (!id || isNaN(id)) {
       return res.status(400).json({ 
         error: 'ID inválido',
         message: 'O ID deve ser um número' 
@@ -89,8 +91,8 @@ export const atualizarTarefa = async (req, res) => {
     }
     
     // Verifica se a tarefa existe
-    const tarefa = await Tarefa.findByPk(id);
-    if (!tarefa) {
+    const tarefaExistente = await Tarefa.findById(parseInt(id));
+    if (!tarefaExistente) {
       return res.status(404).json({ 
         error: 'Tarefa não encontrada',
         message: `Nenhuma tarefa encontrada com o ID ${id}` 
@@ -118,9 +120,7 @@ export const atualizarTarefa = async (req, res) => {
       });
     }
     
-    await Tarefa.update(dadosAtualizados, { where: { id } });
-    
-    const tarefaAtualizada = await Tarefa.findByPk(id);
+    const tarefaAtualizada = await Tarefa.update(parseInt(id), dadosAtualizados);
     res.json(tarefaAtualizada);
   } catch (error) {
     console.error(`Erro ao atualizar tarefa ${req.params.id}:`, error);
@@ -135,7 +135,7 @@ export const excluirTarefa = async (req, res) => {
   try {
     const { id } = req.params;
     
-    if (isNaN(id)) {
+    if (!id || isNaN(id)) {
       return res.status(400).json({ 
         error: 'ID inválido',
         message: 'O ID deve ser um número' 
@@ -143,15 +143,15 @@ export const excluirTarefa = async (req, res) => {
     }
     
     // Verifica se a tarefa existe
-    const tarefa = await Tarefa.findByPk(id);
-    if (!tarefa) {
+    const tarefaExistente = await Tarefa.findById(parseInt(id));
+    if (!tarefaExistente) {
       return res.status(404).json({ 
         error: 'Tarefa não encontrada',
         message: `Nenhuma tarefa encontrada com o ID ${id}` 
       });
     }
     
-    await Tarefa.destroy({ where: { id } });
+    await Tarefa.delete(parseInt(id));
     
     res.status(204).send();
   } catch (error) {

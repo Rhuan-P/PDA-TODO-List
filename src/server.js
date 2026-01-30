@@ -1,6 +1,5 @@
 import app from './app.js';
-import './models/Tarefa.js';
-import sequelize from './config/database.js';
+import './config/supabase.js';
 
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -15,10 +14,9 @@ const shutdown = async (server, options = { coredump: false, timeout: 500 }) => 
   // Encerra as conexões do banco de dados
   const closeDatabase = async () => {
     try {
-      await sequelize.close();
-      console.log('✅ Conexão com o banco de dados encerrada');
+      console.log('✅ Conexão com o Supabase encerrada');
     } catch (error) {
-      console.error('❌ Erro ao encerrar conexão com o banco de dados:', error);
+      console.error('❌ Erro ao encerrar conexão com o Supabase:', error);
     }
   };
 
@@ -61,10 +59,7 @@ const shutdown = async (server, options = { coredump: false, timeout: 500 }) => 
 // Inicialização do servidor
 const startServer = async () => {
   try {
-    // Sincronizar modelos com o banco de dados
-    console.log('🔄 Sincronizando modelos com o banco de dados...');
-    await sequelize.sync({ force: NODE_ENV === 'development' });
-    console.log('✅ Banco de dados sincronizado');
+    console.log('🔄 Conectando ao Supabase...');
     
     // Iniciar o servidor
     const server = app.listen(PORT, '0.0.0.0', () => {
