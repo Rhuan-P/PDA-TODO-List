@@ -23,12 +23,12 @@ const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'API To-Do List',
-      version: '1.0.0',
-      description: 'API para gerenciamento de tarefas com CRUD completo',
+      title: 'PDA TODO LIST API',
+      version: '2.0.0',
+      description: 'API moderna para gerenciamento de tarefas com Supabase backend',
       contact: {
-        name: 'Suporte',
-        email: 'suporte@exemplo.com'
+        name: 'Rhuan Pablo',
+        email: 'rhuanpablomonteiro@gmail.com'
       },
       license: {
         name: 'MIT',
@@ -39,6 +39,10 @@ const swaggerOptions = {
       {
         url: 'http://localhost:3000',
         description: 'Servidor de Desenvolvimento',
+      },
+      {
+        url: 'https://pda-todo-list.vercel.app',
+        description: 'Servidor de Produção',
       },
     ],
     components: {

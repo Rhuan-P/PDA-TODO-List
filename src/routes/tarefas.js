@@ -115,6 +115,11 @@ router.get('/', listarTarefas);
  *                 type: string
  *                 description: Descrição detalhada da tarefa
  *                 example: "Comprar itens do mês no supermercado"
+ *               status:
+ *                 type: string
+ *                 enum: [pendente, em_andamento, concluida]
+ *                 description: Status inicial da tarefa
+ *                 example: "pendente"
  *     responses:
  *       201:
  *         description: Tarefa criada com sucesso
